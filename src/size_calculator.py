@@ -1,10 +1,10 @@
 from skimage.io import imread, imsave
 from skimage.transform import resize
-from skimage.color import rgb2grey
+from skimage.color import rgb2gray
 from keras.models import load_model
 from test_model import sliding_window_count_simple, non_max_suppression_fast, draw_boxes, sliding_window_count_vectorised
 import numpy as np
-from skimage.color import grey2rgb
+from skimage.color import gray2rgb
 import matplotlib.pyplot as plt
 import os
 from sklearn.cluster import KMeans
@@ -60,7 +60,7 @@ def label_meaning(cluster_centres):
 def create_for_contours(file_name, field, boxes, labels, size_labels, RGB_tuples=None):
     if RGB_tuples is None:
         RGB_tuples = np.array([(0,0,255),(0,255,0),(255,0,0)])
-    output_field = grey2rgb(field.copy())
+    output_field = gray2rgb(field.copy())
     for (x1, y1, x2, y2), label in list(zip(boxes, labels)):
         # use the label to index into the size ordering, to index into the colors.
         set_color(output_field, circle(abs(x2 + x1) / 2.0, abs(y2 + y1) / 2.0, radius=(abs(y2 - y1) + 1.0) /2.0), RGB_tuples[size_labels[label]])
@@ -72,7 +72,7 @@ def create_staged_labels(file_name, field, boxes,labels, size_labels, count_elem
         RGB_tuples = np.array([(0,0,255),(0,255,0),(255,0,0)])
 
     for i in range(1, 5):
-        output_field = grey2rgb(field.copy())
+        output_field = gray2rgb(field.copy())
         print(int(labels.shape[0] * (i / 4)))
         for (x1, y1, x2, y2), label in list(zip(boxes, labels))[:int(labels.shape[0] * (i / 4))]:
             # use the label to index into the size ordering, to index into the colors.

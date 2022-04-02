@@ -1,27 +1,27 @@
 from skimage.io import imread, imsave
 from skimage.transform import resize
-from skimage.color import rgb2grey
+from skimage.color import rgb2gray
 from keras.models import load_model
 from test_model import sliding_window_count_simple, non_max_suppression_fast, draw_boxes, sliding_window_count_vectorised
 import numpy as np
-from skimage.color import grey2rgb
+from skimage.color import gray2rgb
 import matplotlib.pyplot as plt
 import os
 
 
 def extract_region(field, model, x, y, l, box_length, stride, threshold=0.97, prune=False):
-    im = rgb2grey(field[x:x + l, y:y + l])  # transform from color to grey
+    im = rgb2gray(field[x:x + l, y:y + l])  # transform from color to grey
     im = resize(im, (im.shape[0] * 3, im.shape[1] * 3))  ##scale it up, hideous i know, but you can't train on this 8x8 pixels. plus the ground_truth was scaled....
     ##collect all the boxes and the probabilities.
     box, prob = sliding_window_count_vectorised(im, model, length=box_length, stride=stride,
                                                 probability_threshold=threshold)
 
     # no probs, no boxes, bail!
-    if len(prob) is 0:
+    if len(prob) == 0:
         return box, prob
 
     # test code to view boxes etc.
-    #to_draw = draw_boxes(grey2rgb(im), box)
+    #to_draw = draw_boxes(gray2rgb(im), box)
     #plt.imshow(to_draw)
     #plt.show()
     #plt.show()
@@ -74,7 +74,7 @@ def evaluate_whole_field(output_dir, field, model, l=250, stride=5, prune=True):
 
             box, prob = extract_region(field, model, x, y, l, box_length, stride, threshold=0.90, prune=prune)
 
-            if len(box) is not 0:
+            if len(box) != 0:
                 boxes = np.vstack((boxes,box))
                 probs = np.hstack((probs,prob))
 
@@ -94,7 +94,7 @@ def evaluate_whole_field(output_dir, field, model, l=250, stride=5, prune=True):
         np.save(output_dir + "pruned_boxes.npy", boxes)
         np.save(output_dir + "pruned_probs.npy", probs)
         print(boxes.shape)
-    #imsave(name+"_lettuce_count_" + str(boxes.shape[0]) + ".png", draw_boxes(grey2rgb(field), boxes, color=(255,0,0)))
+    #imsave(name+"_lettuce_count_" + str(boxes.shape[0]) + ".png", draw_boxes(gray2rgb(field), boxes, color=(255,0,0)))
 
 def prune_boxes(name,overlap_coefficient=0.18):
     boxes = np.load("boxes.npy")
@@ -105,7 +105,7 @@ def prune_boxes(name,overlap_coefficient=0.18):
     np.save(name + "/pruned_probs.npy", probs)
     print(boxes.shape)
     boxes = np.save(name + "/pruned_boxes.npy", boxes)
-    imsave(name+"_lettuce_count_" + str(boxes.shape[0]) + ".png", draw_boxes(grey2rgb(whole_field), boxes, color=(255,0,0)))
+    imsave(name+"_lettuce_count_" + str(boxes.shape[0]) + ".png", draw_boxes(gray2rgb(whole_field), boxes, color=(255,0,0)))
 
 
 if __name__ == "__main__":

@@ -39,7 +39,7 @@ def load_field_data():
             continue
 
         img = fix_noise(cv2.cvtColor(cv2.imread(image), cv2.COLOR_BGR2RGB))
-        img = rgb2grey(img)
+        img = rgb2gray(img)
         name = "./CONVERTED/"+os.path.basename(textfile)+".tif"
         img_y = imread(image_Y + ".tif")
         img = resize(img, (img_y.shape[0], img_y.shape[1], 1))
@@ -55,7 +55,7 @@ def load_field_data():
 def sliding_window_count(img, model, stride=10):
         img = img.reshape(img.shape[:2])
         img = np.pad(img, stride+1, mode='constant')
-        todraw = grey2rgb(img.copy()) ##reshape it from 900,900,1 to 900,900
+        todraw = gray2rgb(img.copy()) ##reshape it from 900,900,1 to 900,900
         plt.imshow(todraw)
         plt.show()
 
@@ -263,7 +263,7 @@ def test_model():
     '''for name, train, positions, (boxes, probs) in zip(names, train_X, position_Y, all_data):
         boxes,_ = non_max_suppression_fast(boxes, probs, overlap)  # 18%
         img = np.pad(train.copy().reshape(train.shape[:2]), stride, mode='constant')
-        img = grey2rgb(img)  ##reshape it from 900,900,1 to 900,900
+        img = gray2rgb(img)  ##reshape it from 900,900,1 to 900,900
         img = draw_boxes(img, boxes)
         plt.imshow(img)
         plt.show()'''
@@ -297,7 +297,7 @@ def test_model():
         for train, positions, (boxes, probs) in zipped:
             boxes = non_max_suppression_fast(boxes, probs, overlap) #20%
             img = np.pad(train.copy().reshape(train.shape[:2]), stride, mode='constant')
-            img = grey2rgb(img)  ##reshape it from 900,900,1 to 900,900
+            img = gray2rgb(img)  ##reshape it from 900,900,1 to 900,900
             img = draw_boxes(img, boxes)
             plt.imshow(img)
             plt.show()
@@ -341,7 +341,7 @@ def create_bounding_box_figure():
 
     box, prob = non_max_suppression_fast(boxes, probs, 0.18)
 
-    train = grey2rgb(train.reshape(train.shape[:2]))
+    train = gray2rgb(train.reshape(train.shape[:2]))
 
     #draw_boxes_please(train.copy(), boxes)
 
@@ -415,7 +415,7 @@ def create_bounding_box_quadrant():
             boxes.append((x,y,x+l,y+l))
 
     print(boxes)
-    whole_field = draw_boxes_please(grey2rgb(whole_field), np.array(boxes), color=(255,255,0), width=5)
+    whole_field = draw_boxes_please(gray2rgb(whole_field), np.array(boxes), color=(255,255,0), width=5)
     plt.imshow(whole_field)
     plt.show()
     imsave("quadrants.png", resize(whole_field, np.divide(whole_field.shape,(10,10,1)).astype(np.int)))
@@ -482,7 +482,7 @@ def create_colorful_section():
 
     image += '.txt_sub_img.tif'
     img = fix_noise(cv2.cvtColor(cv2.imread(image), cv2.COLOR_BGR2RGB))
-    img = rgb2grey(img)
+    img = rgb2gray(img)
     name = "./CONVERTED/"+os.path.basename(textfile)+".tif"
     img_y = imread(image_Y + ".tif")
     img = resize(img, (img_y.shape[0], img_y.shape[1], 1))
@@ -492,7 +492,7 @@ def create_colorful_section():
     print(img.shape)
 
 
-    im = grey2rgb(np.squeeze(img))
+    im = gray2rgb(np.squeeze(img))
     print(im.shape)
     plt.imshow(im)
     plt.show()

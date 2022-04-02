@@ -1,0 +1,9 @@
+Pillow
+opencv-python
+scikit-image==0.16.2
+scikit-learn==0.22
+Keras
+matplotlib
+numpy
+tensorflow
+geopy

@@ -10,7 +10,7 @@ from skimage.filters import gaussian, median
 from skimage.morphology import disk
 import numpy as np
 from scipy.stats import mode
-from skimage.color import rgb2grey
+from skimage.color import rgb2gray
 from skimage.transform import rescale, resize
 from skimage.util import view_as_blocks, view_as_windows
 from skimage.restoration import denoise_bilateral, denoise_tv_chambolle
